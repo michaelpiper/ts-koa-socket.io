@@ -1,5 +1,5 @@
 <% if (locals.google) { %>
-    <form autocomplete="off" action="/interaction/<%= uid %>/federated" method="post">
+    <form autocomplete="off" action="/idp/interaction/<%= uid %>/federated" method="post">
       <input type="hidden" name="upstream" value="google">
       <button type="submit" class="google-button">
         <span class="google-button__icon">
