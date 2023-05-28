@@ -1,5 +1,5 @@
-# WebSocket API with Express Typescript
-> A boilerplate to develop realtime and event-based API to perform **broadcasting** and **real-time data transfer** with Socket.io on Express written in TypeScript and Redis. 
+# WebSocket API with Koa Typescript
+> A boilerplate to develop realtime and event-based API to perform **broadcasting** and **real-time data transfer** with Socket.io on Koa written in TypeScript and Redis. 
 
 ***
 
@@ -31,30 +31,112 @@ File structure
 
 ```
 src/
-├── api/                 => websocket APIs with three-tiers architecture
-|   ├── controllers/        => presentation layer, accept input and provide outputs
-|   ├── middlewares/        => filter HTTP request before enter controllers
-|   ├── models/             => data layers: mongoose
-|   ├── services/           => business layers with business logics
-|   ├── validations/        => well-defined rules for provided inputs
-|   ├── routes.ts           => route the request to associated controllers
-├── common/              => resource shared among the projects
-|   ├── interfaces/         => define the specification of types or entity
-|   ├── config.ts           => environment configurations with .env (dotenv)
-|   ├── constants.ts        => enums
-|   ├── types.ts            => data types
-├── loaders/             => bootstrapping with inversion of control
-|   ├── ExpressServer.ts    => start express server configurations
-|   ├── index.ts            => boot express, redis and socket.io 
-|   ├── RedisServer.ts      => start redis server configurations
-|   ├── SocketServer.ts     => socket server configurations
-├── responses/           => HTTP responses custom error handler
-|   ├── clientErrors/       => error code between 400 - 499
-|   ├── serverErrors/       => error code 500 and above
-|   ├── successful/         => successful responses
-|   ├── ErrorHandler.ts     => middleware for center point of exception handling
-├── utils/               => utilities for entire project 
-└── server.ts            => entry point of node to start the project 
+├── @api
+│   ├── api.entry.ts
+│   ├── api.middleware.ts
+│   └── todo
+│       ├── controllers
+│       │   └── todo.controller.ts
+│       ├── entities
+│       │   └── todo.entity.ts
+│       ├── middlewares
+│       │   └── todo.middleware.ts
+│       ├── models
+│       │   ├── todo.model.ts
+│       │   └── todoList.model.ts
+│       ├── routes
+│       │   └── todo.route.ts
+│       ├── services
+│       │   └── todo.service.ts
+│       └── validations
+│           └── todo.validation.ts
+├── @idp
+│   ├── account
+│   │   ├── controllers
+│   │   │   ├── account.controller.ts
+│   │   │   └── interaction.controller.ts
+│   │   ├── interfaces
+│   │   │   ├── account.interface.ts
+│   │   │   └── interaction.interface.ts
+│   │   ├── middlewares
+│   │   │   └── interaction.middleware.ts
+│   │   └── routes
+│   │       └── interaction.route.ts
+│   ├── adapters
+│   │   └── redis.adapter.ts
+│   ├── idp.entry.ts
+│   ├── idp.middleware.ts
+│   ├── idp.provider.ts
+│   └── support
+│       ├── account.ts
+│       ├── configuration.ts
+│       └── debug.ts
+├── admin
+├── common
+│   ├── addons
+│   │   ├── admin.addon.config.ts
+│   │   └── db.addon.config.ts
+│   ├── config
+│   │   ├── config.ts
+│   │   └── index.ts
+│   ├── constants.ts
+│   ├── interfaces
+│   │   ├── jsonwebtoken.ts
+│   │   └── responses.ts
+│   ├── logger
+│   │   └── console.ts
+│   ├── plugins
+│   │   ├── cacheManger.plugin.ts
+│   │   ├── db.plugin.ts
+│   │   ├── idp.plugin.ts
+│   │   ├── idpStore.plugin.ts
+│   │   ├── index.ts
+│   │   ├── plugin.ts
+│   │   └── redis.plugin.ts
+│   ├── registry.ts
+│   ├── servers
+│   │   ├── admin.server.ts
+│   │   └── socket.server.ts
+│   └── types.ts
+├── factories
+│   ├── addon.config.ts
+│   ├── addon.plugin.ts
+│   ├── artifact.factory.ts
+│   ├── error.factory.ts
+│   ├── idpAdapter.factory.ts
+│   ├── registry.factory.ts
+│   └── server.factory.ts
+├── loaders
+│   ├── index.ts
+│   ├── zeroant.context.ts
+│   └── zeroant.ts
+├── migrations
+│   ├── data.source.ts
+│   ├── index.ts
+│   └── pipelines
+│       ├── 1684885894601-migration.ts
+│       ├── 1684885942629-migration.ts
+│       └── 1684886041636-migration.ts
+├── responses
+│   ├── artifacts
+│   │   ├── create.artifact.ts
+│   │   └── success.artifact.ts
+│   ├── clientErrors
+│   │   ├── badRequest.clientError.ts
+│   │   ├── forbidden.clientError.ts
+│   │   ├── notFound.clientError.ts
+│   │   ├── unauthorized.clientError.ts
+│   │   └── unprocessableEntity.clientError.ts
+│   ├── errorHandler.ts
+│   ├── responseHandler.ts
+│   ├── serverErrors
+│   │   └── InternalServerError.serverError.ts
+│   └── validationHandler.ts
+├── server.ts
+└── utils
+    ├── jsonwebtoken.util.ts
+    ├── storage.util.ts
+    └── ttl.util.ts
 
 ```
 
@@ -77,14 +159,14 @@ OAuth 2.0 security protocol with password grant is selected to prevent unauthori
 
 Typescript programming language with ES6 features or above is used to develop the project to increase greater discipline to saturate the codebase with strict type checking, better code structuring and object-oriented programming techniques. 
 
-Docker Compose is use for define and running both Express Server and Redis in-memory database containers to build the service. The compose file consists of development and production version for developers help improve compatibility and standardization of development and production environment.
+Docker Compose is use for define and running both Koa Server and Redis in-memory database containers to build the service. The compose file consists of development and production version for developers help improve compatibility and standardization of development and production environment.
 
 *** 
 
 Limitation
 ==========
 * [ ] Multiple environment (development and production) for Socket Server
-* [ ] Multiple environment (development and production) for Express Server
+* [ ] Multiple environment (development and production) for Koa Server
 * [ ] Test case configuration for Typescript (Jest)
 * [ ] Lack of index.d.ts file for entire project
 
@@ -101,8 +183,8 @@ $ docker-compose -f docker-compose.yml up -d
 2. Verify the running status
 ```docker
 $ docker container ls
-xxxxxxxxxxxx        ts-express-socketio_socket   "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        0.0.0.0:8080->8080/tcp   ts-express-socketio_socket_1
-xxxxxxxxxxxx        redis:alpine                 "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        6379/tcp                 ts-express-socketio_redis_1
+xxxxxxxxxxxx        ts-koa-socketio_socket   "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        0.0.0.0:8080->8080/tcp   ts-koa-socketio_socket_1
+xxxxxxxxxxxx        redis:alpine                 "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        6379/tcp                 ts-koa-socketio_redis_1
 ``` 
 
 Running in Production
@@ -122,13 +204,13 @@ $ docker stack deploy --compose-file docker-compose.prod.yml socket-with-redis
 $ docker service ls
 ID                  NAME                       MODE                REPLICAS            IMAGE                               PORTS
 xxxxxxxxxxxx        socket-with-redis_redis    replicated          1/1                 redis:alpine                        
-xxxxxxxxxxxx        socket-with-redis_socket   global              1/1                 ts-express-socketio_socket:latest   *:8000->8000/tcp
+xxxxxxxxxxxx        socket-with-redis_socket   global              1/1                 ts-koa-socketio_socket:latest   *:8000->8000/tcp
 ``` 
 
 Tool and Technologies
 =====================
 1. Linux Ubuntu 20.04 LTS (Focal Fossa) AMD64 Desktop OS
-2. Express Server 4.17.1 
+2. Koa Server ^2.14.2 
 3. NodeJS v10.19.0 
 4. Typescript v3.8.3
 5. Socket.io v2.3.0
