@@ -1,5 +1,5 @@
 {
-  "name": "ts-boilerplate-socket.io",
+  "name": "ts-koa-socket.io",
   "version": "1.0.0",
   "description": "Broadcasting with Socket.io on Koa written with TypeScript",
   "repository": "git@github.com:michaelpiper/ts-koa-socket.io.git",

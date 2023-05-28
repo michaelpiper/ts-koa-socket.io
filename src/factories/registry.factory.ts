@@ -7,7 +7,7 @@ import { type ServerFactory, type ServerFactoryConstructor } from './server.fact
 
 export abstract class RegistryRouteEntryFactory {
   name: string
-  abstract router: Router
+  abstract router: Router | Koa
   constructor (protected context: ZeroantContext) {
   }
 

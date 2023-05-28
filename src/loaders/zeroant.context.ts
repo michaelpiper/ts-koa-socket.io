@@ -6,6 +6,7 @@ import { type RegistryRouteEntryFactory } from '../factories/registry.factory.js
 import { type ServerFactoryConstructor, type ServerFactory } from '../factories/server.factory.js'
 import { type Config } from '../common/config/config.js'
 import { type Plugin } from '../common/plugins/plugin.js'
+import mount from 'koa-mount'
 export class ZeroantContext {
   static PORT = 8080
   _app: Koa
@@ -19,9 +20,14 @@ export class ZeroantContext {
 
   initRoutes (routes: RegistryRouteEntryFactory[]) {
     for (const route of routes) {
-      this._app
-        .use(route.router.routes())
-        .use(route.router.allowedMethods())
+      if (route.router instanceof Koa) {
+        this._app
+          .use(mount(route.name, route.router))
+      } else {
+        this._app
+          .use(mount(route.name, route.router.routes()))
+          .use(mount(route.name, route.router.allowedMethods()))
+      }
     }
   }
 
@@ -45,7 +51,7 @@ export class ZeroantContext {
   }
 
   onStart () {
-    console.log('Running Express Server on port %s', this._port)
+    console.log('Running Zeroant Server on port %s', this._port)
     for (const server of this._servers) {
       server.onStart()
     }

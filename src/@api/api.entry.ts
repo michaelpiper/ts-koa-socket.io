@@ -10,10 +10,7 @@ import cors from '@koa/cors'
 import responseHandler from '../responses/responseHandler.js'
 export default class ApiRouteEntry extends RegistryRouteEntryFactory {
   middleware = new ApiMiddleware()
-  public router: Router = new Router({
-    prefix: '/api'
-  })
-
+  public router: Router = new Router()
   public name = '/api'
   constructor (readonly context: ZeroantContext) {
     super(context)

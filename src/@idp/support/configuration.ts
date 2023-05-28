@@ -4,9 +4,9 @@ const configuration: Configuration = {
     {
       client_id: 'oidcCLIENT',
       client_secret: '...',
-      response_types: ['code', 'id_token', 'code id_token'],
-      grant_types: ['authorization_code', 'implicit'],
-      redirect_uris: ['https://cashtokenreward.com/m/return_url', 'https://sso-client.dev/providers/7/open_id', 'https://sso-client.dev/providers/8/open_id']
+      response_types: ['code'],
+      grant_types: ['authorization_code'],
+      redirect_uris: ['https://cashtokenreward.com/m/return_url', 'https://sso-client.dev/providers/7/open_id', 'http://locahost:8000/open_id', 'https://sso-client.dev/providers/8/open_id']
     }
   ],
   interactions: {

@@ -7,6 +7,6 @@ const router = new Router({
   prefix: '/todos'
 })
 const controller = new TodoApiController()
-router.post('/store', validationHandler(storeValidation, { sources: ['request.body'] }), controller.store)
+router.post('/store', validationHandler(storeValidation, { sources: ['body'] }), controller.store)
 router.get('/list', controller.list)
 export default router
