@@ -1,0 +1,56 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "incremental": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        // ECMAScript target version:
+        "target": "ESNext",
+        "lib": [
+            "es2016",
+            "es2015",
+            "dom",
+            "esnext.asynciterable",
+            "es2017",
+            "ESNext"
+        ],
+        // enables --noImplicitAny, --noImplicitThis, --alwaysStrict, --strictBindCallApply, --strictNullChecks, --strictFunctionTypes and --strictPropertyInitialization.
+        "strict": true,
+        "strictPropertyInitialization": false,
+        // generate files to revert combined/minified file back to original states
+        "sourceMap": true,
+        // redirect output structure to the directory
+        "outDir": "application",
+        // base directory to resolve non-relative module names
+        "baseUrl": "src",
+        // mapping entries for module names to locations
+        "paths": {
+            // "*": [
+            //     // "node_modules/",
+            // ]
+        },
+        // "typeRoots": [
+        //     "typings"
+        // ],
+
+
+        // "types": [ "typings/index.d.ts"],
+    },
+    "include": [
+        "src",
+        "typings"
+   ],
+    // exclude npm modules during compilations
+    "exclude": [
+        "node_modules"
+    ]
+}

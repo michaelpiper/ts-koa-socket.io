@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+    socket:
+        restart: unless-stopped
+        # the path of directory for build
+        build: 
+            context: . 
+            dockerfile: Dockerfile
+        env_file: .env
+        # the changes in my local will be reflected into container (development only)
+        volumes:
+            - .:/usr/src/app
+            # - /usr/src/app/node_modules
+        ports: 
+            - "8080:8080"
+        expose: # internal ports
+            - "8080"
+        environment: 
+            NODE_ENV: development
+            SERVER_PORT: 8080
+            REDIS_HOST: "redis"
+        links: 
+            - "redis"
+    redis:
+        restart: unless-stopped
+        image: "redis:alpine"
+        expose: 
+            - "6379"
+
+# docker-compose up -d --no-deps --build --no-cache <service_name>
