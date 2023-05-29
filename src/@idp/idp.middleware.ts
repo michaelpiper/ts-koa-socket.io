@@ -15,17 +15,8 @@ export class IdpMiddleware {
 
   async updateViewLayout (ctx: Context, next: Next) {
     const orig = ctx.render
-    // ctx.render = (view, locals) => {
-    //   this.app.render(view, locals, (err, html) => {
-    //     if (err !== undefined) { throw err }
-    //     orig.call(res, '_layout', {
-    //       ...locals,
-    //       body: html
-    //     } as any)
-    //   })
-    // }
     ctx.render = async (view, locals) => {
-      console.log(String(orig))
+      // console.log(String(orig))
       const body = await (orig.call(ctx, view, locals) as any) as string
       const html = await (orig.call(ctx, '_layout', {
         ...locals,

@@ -1,6 +1,6 @@
 import { ErrorFactory } from '../factories/error.factory.js'
 import { type Middleware, type Context, type Next } from 'koa'
-import { InternalServerError } from './serverErrors/InternalServerError.serverError.js'
+import { InternalServerError } from './serverErrors/internalServerError.serverError.js'
 import { ErrorCode, ErrorDescription } from '../common/constants.js'
 export default (): Middleware => {
   return async (ctx, next: Next) => {
