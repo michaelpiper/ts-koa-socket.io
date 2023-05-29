@@ -31,6 +31,8 @@ File structure
 
 ```
 src/
+├── @admin
+│   └── admin.entry.ts
 ├── @api
 │   ├── api.entry.ts
 │   ├── api.middleware.ts
@@ -71,7 +73,8 @@ src/
 │       ├── account.ts
 │       ├── configuration.ts
 │       └── debug.ts
-├── admin
+├── admin.server.ts
+├── api.server.ts
 ├── common
 │   ├── addons
 │   │   ├── admin.addon.config.ts
@@ -95,7 +98,6 @@ src/
 │   │   └── redis.plugin.ts
 │   ├── registry.ts
 │   ├── servers
-│   │   ├── admin.server.ts
 │   │   └── socket.server.ts
 │   └── types.ts
 ├── factories
@@ -106,6 +108,7 @@ src/
 │   ├── idpAdapter.factory.ts
 │   ├── registry.factory.ts
 │   └── server.factory.ts
+├── idp.server.ts
 ├── loaders
 │   ├── index.ts
 │   ├── zeroant.context.ts
