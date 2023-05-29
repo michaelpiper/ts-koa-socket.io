@@ -11,6 +11,11 @@ export enum SocketStatus {
   NEW_INBOX = 'NEW_INBOX',
   NEW_ANNOUNCEMENT = 'NEW_ANNOUNCEMENT'
 }
+export enum ServerEventType {
+  START = 'START',
+  BEFORE_START = 'BEFORE_START',
+  AFTER_START = 'AFTER_START'
+}
 
 export enum Platform {
   SAMPLE_PLATFORM = 'SAMPLE_PLATFORM'

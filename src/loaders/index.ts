@@ -2,9 +2,9 @@ import zeroant from './zeroant.js'
 import Config from '../common/config/index.js'
 import { Plugin } from '../common/plugins/index.js'
 import Registry from '../common/registry.js'
-export default async () => {
+export default async (customConfig: Record<string, string | undefined> = {}) => {
   const plugins = new Plugin(zeroant)
-  const config = new Config(process.env)
+  const config = new Config(Object.assign({}, process.env, customConfig))
   for (const addon of Registry.configs) {
     config.addons
       .set(addon)

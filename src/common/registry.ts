@@ -7,7 +7,7 @@ import { AdminAddonConfig } from './addons/admin.addon.config.js'
 import { DBAddonConfig } from './addons/db.addon.config.js'
 import { DBPlugin } from './plugins/db.plugin.js'
 import { CacheManagerPlugin } from './plugins/cacheManger.plugin.js'
-import AdminServer from './servers/admin.server.js'
+import AdminEntry from '../@admin/admin.entry.js'
 import { SocketServer } from './servers/socket.server.js'
 import IdpStorePlugin from './plugins/idpStore.plugin.js'
 import { type ZeroantContext } from 'loaders/zeroant.context.js'
@@ -39,16 +39,15 @@ export class Registry extends RegistryFactory {
   ]
 
   servers = [
-    AdminServer,
     SocketServer
   ]
 
   get routes () {
     return [
       new ApiEntry(this.context),
-      new IdpEntry(this.context)
+      new IdpEntry(this.context),
+      new AdminEntry(this.context)
     ]
   }
 }
 export default Registry
-// # sourceMappingURL=registry.js.map

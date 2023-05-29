@@ -13,6 +13,7 @@ export class AdminAddonConfig extends AddonConfig {
 
   _options (): AdminJSOptions {
     return {
+      rootPath: '/admin',
       resources: [{
         resource: TodoEntity,
         options: {

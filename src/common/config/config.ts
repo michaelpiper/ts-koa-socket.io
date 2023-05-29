@@ -9,6 +9,12 @@ const isEnvFound = dotenv.config({ path: ENV_FILE_PATH })
 if (isEnvFound.error != null) {
   throw new Error('Cannot find .env file.')
 }
+export type SERVER_MODE = 'standalone' | 'combine'
+export interface CustomConfig {
+  SERVER_MODE?: SERVER_MODE
+  SERVER_APP?: string
+  SERVER_MOUNT_AS_ROOT?: 'on' | 'off'
+}
 export class Config {
   serverPort: number
   redisPort: number
@@ -21,6 +27,9 @@ export class Config {
   readonly productionEnvironments = ['prod', 'production']
   addons = new ConfigAddons(this)
   absPath = ABS_PATH
+  serverMode: SERVER_MODE = 'combine'
+  serverApp: string
+  serverMountAsRoot: boolean
   constructor (protected readonly _config: Record<string, string | undefined>) {
     this.environment = this.get('NODE_ENV', 'development')
     this.isProd = this.productionEnvironments.includes(this.environment)
@@ -28,6 +37,9 @@ export class Config {
     this.appName = this.get('APP_NAME', 'ZeroAnt')
     this.redisPort = parseInt(this.get('REDIS_PORT', ''), 10)
     this.redisHost = this.get('REDIS_HOST', '127.0.0.1')
+    this.serverMode = this.get<SERVER_MODE>('SERVER_MODE', 'combine')
+    this.serverApp = this.get<string>('SERVER_APP', '*')
+    this.serverMountAsRoot = this.get<string>('SERVER_MOUNT_AS_ROOT', 'on') === 'on'
     this.samplePlatformAudience = this.get('SAMPLE_PLATFORM_AUDIENCE', null)
     this.samplePlatformPublicKey = this.get('SAMPLE_PLATFORM_PUBLIC_KEY', '123123')
   }

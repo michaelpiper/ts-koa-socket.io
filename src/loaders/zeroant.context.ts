@@ -1,34 +1,75 @@
 import Koa from 'koa'
 import { createServer, type Server } from 'http'
 import { InternalServerError } from '../responses/serverErrors/InternalServerError.serverError.js'
-import { ErrorCode, ErrorDescription } from '../common/constants.js'
+import { ErrorCode, ErrorDescription, ServerEventType } from '../common/constants.js'
 import { type RegistryRouteEntryFactory } from '../factories/registry.factory.js'
 import { type ServerFactoryConstructor, type ServerFactory } from '../factories/server.factory.js'
 import { type Config } from '../common/config/config.js'
 import { type Plugin } from '../common/plugins/plugin.js'
 import mount from 'koa-mount'
+import { EventEmitter } from 'events'
 export class ZeroantContext {
   static PORT = 8080
   _app: Koa
   protected _server: Server
   protected _port: number
   #store = new Map()
+  #event = new EventEmitter()
   _servers: ServerFactory[] = []
   constructor () {
     this._app = new Koa()
   }
 
   initRoutes (routes: RegistryRouteEntryFactory[]) {
+    const apps = this.config.serverApp.split(',')
+    const mode = this.config.serverMode
+    console.log('Server App', apps)
+    console.log('Server Mode', mode)
     for (const route of routes) {
-      if (route.router instanceof Koa) {
-        this._app
-          .use(mount(route.name, route.router))
-      } else {
-        this._app
-          .use(mount(route.name, route.router.routes()))
-          .use(mount(route.name, route.router.allowedMethods()))
+      const mountPoint = this.getMountPoint(route.name, apps)
+      if (mode === 'combine') {
+        this._initRoute(mountPoint, route)
+      } else if (mode === 'standalone') {
+        if (apps.includes(route.name)) {
+          this._initRoute(mountPoint, route)
+        }
       }
     }
+  }
+
+  isStandAlone (appName: string, _apps?: string[]): boolean {
+    if (this.config.serverMode !== 'standalone') {
+      return false
+    }
+    const apps = _apps ?? this.config.serverApp.split(',')
+    return apps.includes(appName)
+  }
+
+  getMountPoint (appName: string, _apps?: string[]): string {
+    const apps = _apps ?? this.config.serverApp.split(',')
+    return this.config.serverMountAsRoot && this.isStandAlone(appName, apps) ? '/' : appName
+  }
+
+  protected _initRoute (mountPoint: string, route: RegistryRouteEntryFactory) {
+    console.log(`Mounting app ${route.name} on ${mountPoint}`)
+    if (route.router instanceof Koa) {
+      if (route.dynamicRoute) {
+        // ignore rootPath since it already or probably defined by the app
+        return this._app
+          .use(mount(route.router))
+      }
+      return this._app
+        .use(mount(mountPoint, route.router))
+    }
+    if (route.dynamicRoute) {
+      // ignore rootPath since it already or probably defined by the route
+      return this._app
+        .use(mount(route.router.routes()))
+        .use(mount(route.router.allowedMethods()))
+    }
+    return this._app
+      .use(mount(mountPoint, route.router.routes()))
+      .use(mount(mountPoint, route.router.allowedMethods()))
   }
 
   initMiddleware (middlewareList: Koa.Middleware[]) {
@@ -55,12 +96,14 @@ export class ZeroantContext {
     for (const server of this._servers) {
       server.onStart()
     }
+    this.event.emit(ServerEventType.START)
   }
 
   beforeStart () {
     for (const server of this._servers) {
       server.beforeStart()
     }
+    this.event.emit(ServerEventType.BEFORE_START)
   }
 
   has (key: string) {
@@ -113,7 +156,7 @@ export class ZeroantContext {
     this.#store.set('config', config)
   }
 
-  getConfig () {
+  getConfig (): Config {
     const config = this.#store.get('config')
     if (config === null || config === undefined) {
       throw new InternalServerError(ErrorCode.SERVER_EXCEPTION, ErrorDescription.SERVER_EXCEPTION, 'Config Not Init')
@@ -125,4 +168,5 @@ export class ZeroantContext {
   get plugin (): Plugin { return this.getPlugin() }
   get config (): Config { return this.getConfig() }
   get instance (): Koa { return this._app }
+  get event (): EventEmitter { return this.#event }
 }

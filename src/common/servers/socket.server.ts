@@ -6,7 +6,7 @@ import { verifyTokenSignature, platforms } from '../../utils/jsonwebtoken.util.j
 import { ServerFactory } from '../../factories/server.factory.js'
 import { RedisPlugin } from '../plugins/redis.plugin.js'
 import { type ZeroantContext } from '../../loaders/zeroant.context.js'
-import { type IDecodedToken } from '../../common/interfaces/jsonwebtoken.js'
+import { type IDecodedToken } from '../interfaces/jsonwebtoken.js'
 export class SocketServer extends ServerFactory {
   private readonly _io
   private readonly _redis
