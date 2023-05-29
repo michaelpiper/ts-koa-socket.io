@@ -1,5 +1,5 @@
 import { ErrorCode, ErrorDescription } from '../constants.js'
-import { InternalServerError } from '../../responses/serverErrors/internalServerError.serverError.js'
+import { InternalServerError } from '../../responses/serverErrors/InternalServerError.serverError.js'
 import { type ZeroantContext } from '../../loaders/zeroant.context.js'
 import { type AddonPluginConstructor, type AddonPlugin } from '../../factories/addon.plugin.js'
 export class Plugin {

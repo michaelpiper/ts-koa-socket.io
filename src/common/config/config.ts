@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { join, resolve } from 'path'
-import { InternalServerError } from '../../responses/serverErrors/internalServerError.serverError.js'
+import { InternalServerError } from '../../responses/serverErrors/InternalServerError.serverError.js'
 import { ErrorCode, ErrorDescription } from '../constants.js'
 import { type AddonConfigConstructor, type AddonConfig } from '../../factories/addon.config.js'
 const ABS_PATH = resolve('.')

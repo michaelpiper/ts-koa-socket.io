@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import { createServer, type Server } from 'http'
-import { InternalServerError } from '../responses/serverErrors/internalServerError.serverError.js'
+import { InternalServerError } from '../responses/serverErrors/InternalServerError.serverError.js'
 import { ErrorCode, ErrorDescription, ServerEventType } from '../common/constants.js'
 import { type RegistryRouteEntryFactory } from '../factories/registry.factory.js'
 import { type ServerFactoryConstructor, type ServerFactory } from '../factories/server.factory.js'
