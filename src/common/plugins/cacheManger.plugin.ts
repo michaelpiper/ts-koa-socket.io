@@ -54,9 +54,24 @@ export class CacheManagerPlugin extends AddonPlugin {
     return data
   }
 
+  async expired (key: string): Promise<boolean> {
+    const data = await this.find(key)
+    return this._expired(data)
+  }
+
+  _expired (data: CacheData<any> | null): boolean {
+    if (data === null || data.expired) {
+      return true
+    }
+    return false
+  }
+
   async get (key: string) {
     const data = await this.find(key)
     if (data === null || data.expired) {
+      if (data?.expired === true) {
+        await this.del(key)
+      }
       return null
     }
     return data.data
@@ -70,6 +85,10 @@ export class CacheManagerPlugin extends AddonPlugin {
 
   async has (key: string) {
     const jsonString = await this.multiCache.get(key)
+    return this._has(jsonString)
+  }
+
+  _has (jsonString: any): boolean {
     if (jsonString === null || jsonString === undefined) {
       return false
     }
@@ -97,16 +116,26 @@ export class CacheManagerPlugin extends AddonPlugin {
         return null
       },
       async cacheOrAsync (key: string, ttl: Milliseconds) {
-        if (await parent.has(key)) {
-          return await parent.get(key)
+        const cached = await parent.find(key)
+        if (parent._has(cached) && parent._expired(cached)) {
+          await parent.del(key)
+        } else {
+          if (parent._has(cached)) {
+            return cached?.data
+          }
         }
         const data = await source()
         await parent.set(key, data, ttl)
         return data
       },
       async justCache (key: string) {
-        if (await parent.has(key)) {
-          return await parent.get(key)
+        const cached = await parent.find(key)
+        if (parent._has(cached) && parent._expired(cached)) {
+          await parent.del(key)
+        } else {
+          if (parent._has(cached)) {
+            return cached?.data
+          }
         }
         return null
       },

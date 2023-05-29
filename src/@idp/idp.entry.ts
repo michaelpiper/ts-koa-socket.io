@@ -8,6 +8,7 @@ import { RegistryRouteEntryFactory } from '../factories/registry.factory.js'
 import { type ZeroantContext } from 'loaders/zeroant.context.js'
 import mount from 'koa-mount'
 import views from 'koa-views'
+import bodyParser from 'koa-bodyparser'
 export default class IdpRouteEntry extends RegistryRouteEntryFactory {
   router = new Koa()
   name = '/idp'
@@ -20,6 +21,7 @@ export default class IdpRouteEntry extends RegistryRouteEntryFactory {
   }
 
   buildRoutes () {
+    this.router.use(bodyParser())
     if (zeroant.config.isProd) {
       idpProvider.proxy = true
       this.router.use(this.middleware.idpUrlFormatter)

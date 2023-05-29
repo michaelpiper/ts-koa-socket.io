@@ -11,7 +11,6 @@ import AdminEntry from '../@admin/admin.entry.js'
 import { SocketServer } from './servers/socket.server.js'
 import IdpStorePlugin from './plugins/idpStore.plugin.js'
 import { type ZeroantContext } from 'loaders/zeroant.context.js'
-import bodyParser from 'koa-bodyparser'
 export class Registry extends RegistryFactory {
   context
   config
@@ -34,8 +33,7 @@ export class Registry extends RegistryFactory {
   ]
 
   middleware = [
-    morgan('common'),
-    bodyParser()
+    morgan('common')
   ]
 
   servers = [
