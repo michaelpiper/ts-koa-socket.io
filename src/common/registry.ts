@@ -10,13 +10,13 @@ import { CacheManagerPlugin } from './plugins/cacheManger.plugin.js'
 import AdminEntry from '../@admin/admin.entry.js'
 import { SocketServer } from './servers/socket.server.js'
 import IdpStorePlugin from './plugins/idpStore.plugin.js'
-import { type ZeroantContext } from 'loaders/zeroant.context.js'
+import { type ZeroantContext } from '../loaders/zeroant.context.js'
+import { type Config } from './config/config.js'
+import { TodoWorker } from '../@api/todo/workers/todo.worker.js'
 export class Registry extends RegistryFactory {
-  context
-  config
-  constructor (context: ZeroantContext) {
+  config: Config
+  constructor (protected context: ZeroantContext) {
     super()
-    this.context = context
     this.config = context.config
   }
 
@@ -38,6 +38,10 @@ export class Registry extends RegistryFactory {
 
   servers = [
     SocketServer
+  ]
+
+  workers = [
+    TodoWorker
   ]
 
   get routes () {

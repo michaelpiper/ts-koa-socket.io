@@ -20,7 +20,9 @@
     "pre-commit": "yarn lint --fix",
     "migration:run": "yarn build && yarn typeorm migration:run -d application/migrations/index.js",
     "migration:generate": "yarn build && yarn typeorm migration:generate -d application/migrations/index.js src/migrations/pipelines/migration",
-    "start-prod": "NODE_ENV=production yarn start"
+    "start-prod": "NODE_ENV=production yarn start",
+    "worker": "node ./application/worker.server.js",
+    "worker:start": "npm run worker start"
   },
   "keywords": [
     "Socket",

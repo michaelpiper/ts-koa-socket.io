@@ -8,16 +8,52 @@ import { type Config } from '../common/config/config.js'
 import { type Plugin } from '../common/plugins/plugin.js'
 import mount from 'koa-mount'
 import { EventEmitter } from 'events'
+import { type WorkerFactoryConstructor, type WorkerFactory } from '../factories/worker.factory.js'
 export class ZeroantContext {
   static PORT = 8080
   _app: Koa
   protected _server: Server
   protected _port: number
   #store = new Map()
+  #workers = new Map<string, WorkerFactory<any>>()
   #event = new EventEmitter()
   _servers: ServerFactory[] = []
   constructor () {
     this._app = new Koa()
+  }
+
+  initWorkers (workers: Array<WorkerFactoryConstructor<WorkerFactory<any>>>) {
+    for (const Worker of workers) {
+      const worker = new Worker(this)
+      this.#workers.set(worker.name, worker)
+    }
+  }
+
+  getWorkerByName <T extends WorkerFactory<any> >(workerName: string): T | undefined {
+    return this.#workers.get(workerName) as T ?? null
+  }
+
+  getWorkerNames (): IterableIterator<string> {
+    return this.#workers.keys()
+  }
+
+  get workers () {
+    return {
+      get: <T extends WorkerFactory<any>>(Worker: WorkerFactoryConstructor<T>) => this.getWorker<T>(Worker)
+    }
+  }
+
+  getWorker <T extends WorkerFactory<any> >(Worker: WorkerFactoryConstructor<T>): T {
+    for (const worker of this.#workers.values()) {
+      if (worker instanceof Worker) {
+        return worker
+      }
+    }
+    throw new InternalServerError(
+      ErrorCode.UNIMPLEMENTED_EXCEPTION,
+      ErrorDescription.UNIMPLEMENTED_EXCEPTION,
+      'Worker not found'
+    )
   }
 
   initRoutes (routes: RegistryRouteEntryFactory[]) {

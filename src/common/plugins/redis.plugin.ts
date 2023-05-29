@@ -1,5 +1,6 @@
 import * as redis from 'redis'
 import { AddonPlugin } from '../../factories/addon.plugin.js'
+import { Redis } from 'ioredis'
 export class RedisPlugin extends AddonPlugin {
   private _redis: redis.RedisClient
   private _redisPort: number
@@ -39,6 +40,14 @@ export class RedisPlugin extends AddonPlugin {
   close () {
     this._redis.quit()
     console.info(new Date(), '[RedisPlugin]: Stopped')
+  }
+
+  clone (): redis.RedisClient {
+    return redis.createClient(this.options)
+  }
+
+  ioclone (): Redis {
+    return new Redis(this.options)
   }
 
   get instance (): redis.RedisClient {

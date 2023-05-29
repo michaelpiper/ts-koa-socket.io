@@ -6,7 +6,7 @@ const configuration: Configuration = {
       client_secret: '...',
       response_types: ['code'],
       grant_types: ['authorization_code'],
-      redirect_uris: ['https://cashtokenreward.com/m/return_url', 'https://sso-client.dev/providers/7/open_id', 'http://locahost:8000/open_id', 'https://sso-client.dev/providers/8/open_id']
+      redirect_uris: ['https://cashtokenreward.com/m/return_url', 'https://sso-client.dev/providers/7/open_id', 'http://locahost/open_id', 'https://sso-client.dev/providers/8/open_id']
     }
   ],
   interactions: {

@@ -6,7 +6,9 @@ export enum SocketEvent {
   INBOX_NOTIFICATION = 'inbox_notification',
   INBOX_ANNOUNCEMENT = 'inbox_announcement'
 };
-
+export enum JobType {
+  NOTIFICATION = 'NOTIFICATION'
+}
 export enum SocketStatus {
   NEW_INBOX = 'NEW_INBOX',
   NEW_ANNOUNCEMENT = 'NEW_ANNOUNCEMENT'

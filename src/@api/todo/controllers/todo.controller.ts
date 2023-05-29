@@ -12,6 +12,7 @@ import { type Context, type Next } from 'koa'
 import { DBPlugin } from '../../../common/plugins/db.plugin.js'
 import { TodoEntity } from '../entities/todo.entity.js'
 import { type Todo } from '../models/todo.model.js'
+import { TodoWorker } from '../workers/todo.worker.js'
 export class TodoApiController {
   store = async (ctx: Context, next: Next) => {
     const { task, isCompleted } = ctx.request.result as Record<string, any>
@@ -19,7 +20,8 @@ export class TodoApiController {
     const redis = zeroant.plugin.get(RedisPlugin)
     const db = zeroant.plugin.get(DBPlugin).instance
     const repository = db.getRepository(TodoEntity)
-    const todoService = new TodoService(repository, socket, redis)
+    const queue = zeroant.workers.get(TodoWorker).instance
+    const todoService = new TodoService(queue, repository, socket, redis)
     const newTodo = await todoService.storeTodoToModel(task, isCompleted)
     if (newTodo == null) {
       throw new BadRequest(ErrorCode.INVALID_INPUT, ErrorDescription.INVALID_INPUT, 'Can not create todo list')
@@ -32,7 +34,8 @@ export class TodoApiController {
     const redis = zeroant.plugin.get(RedisPlugin)
     const db = zeroant.plugin.get(DBPlugin).instance
     const repository = db.getRepository(TodoEntity)
-    const todoService = new TodoService(repository, socket, redis)
+    const queue = zeroant.workers.get(TodoWorker).instance
+    const todoService = new TodoService(queue, repository, socket, redis)
     const cacheManager = zeroant.plugin.get(CacheManagerPlugin)
     const todoLists = await cacheManager.withStrategy<Todo[]>(async () => await todoService.getList()).cacheOrAsync('new-todo', TtlUtils.oneMinute)
     logger.info('todoLists', todoLists)

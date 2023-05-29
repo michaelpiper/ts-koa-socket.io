@@ -48,7 +48,7 @@
     "include": [
         "src",
         "typings"
-   ],
+, "workers"   ],
     // exclude npm modules during compilations
     "exclude": [
         "node_modules"

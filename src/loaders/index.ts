@@ -18,6 +18,7 @@ export default async (customConfig: CustomConfig = {}) => {
   }
 
   await zeroant.initPlugin(plugins)
+  zeroant.initWorkers(registry.workers ?? [])
   zeroant.initMiddleware(registry.middleware ?? [])
   zeroant.initRoutes(registry.routes ?? [])
   for (const AddonServer of registry.servers ?? []) {

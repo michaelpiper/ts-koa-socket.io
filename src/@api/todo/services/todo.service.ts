@@ -4,8 +4,9 @@ import { type RedisPlugin } from '../../../common/plugins/redis.plugin.js'
 import type socketIo from 'socket.io'
 import { type TodoEntity } from '../entities/todo.entity.js'
 import { type Repository } from 'typeorm'
+import { type Queue } from 'bull'
 export class TodoService {
-  constructor (protected repository: Repository<TodoEntity>, protected socket: socketIo.Server, protected redisServer: RedisPlugin) {
+  constructor (protected queue: Queue<Todo>, protected repository: Repository<TodoEntity>, protected socket: socketIo.Server, protected redisServer: RedisPlugin) {
   }
 
   storeTodoToModel = async (task: string, isCompleted: boolean): Promise<Todo> => {
@@ -19,6 +20,7 @@ export class TodoService {
     if (socketId !== null) {
       this.socket.to(socketId).emit('new_todo', newTodo)
     }
+    await this.queue.add(newTodo)
     return newTodo
   }
 
