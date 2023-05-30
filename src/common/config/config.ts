@@ -4,6 +4,7 @@ import { InternalServerError } from '../../responses/serverErrors/internalServer
 import { ErrorCode, ErrorDescription } from '../constants.js'
 import { type AddonConfigConstructor, type AddonConfig } from '../../factories/addon.config.js'
 const ABS_PATH = resolve('.')
+const APP_PATH = new URL('../../', import.meta.url).pathname.replace(/\/$/, '')
 const ENV_FILE_PATH = resolve(join(ABS_PATH, '.env'))
 const isEnvFound = dotenv.config({ path: ENV_FILE_PATH })
 if (isEnvFound.error != null) {
@@ -26,15 +27,18 @@ export class Config {
   isProd: boolean
   readonly productionEnvironments = ['prod', 'production']
   addons = new ConfigAddons(this)
-  absPath = ABS_PATH
+  readonly absPath = ABS_PATH
   serverMode: SERVER_MODE = 'combine'
   serverApp: string
   serverMountAsRoot: boolean
+  appKeys: string[] = []
+  readonly appPath = APP_PATH
   constructor (protected readonly _config: Record<string, string | undefined>) {
     this.environment = this.get('NODE_ENV', 'development')
     this.isProd = this.productionEnvironments.includes(this.environment)
     this.serverPort = parseInt(this.get('SERVER_PORT', '8080'), 10)
     this.appName = this.get('APP_NAME', 'ZeroAnt')
+    this.appKeys = this.get('APP_KEYS', 'shouldbereplace').split(',')
     this.redisPort = parseInt(this.get('REDIS_PORT', ''), 10)
     this.redisHost = this.get('REDIS_HOST', '127.0.0.1')
     this.serverMode = this.get<SERVER_MODE>('SERVER_MODE', 'combine')

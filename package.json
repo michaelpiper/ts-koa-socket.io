@@ -81,6 +81,7 @@
     "@types/koa-morgan": "^1.0.5",
     "@types/koa-mount": "^4.0.2",
     "@types/koa-router": "^7.4.4",
+    "@types/koa-session": "^6.4.1",
     "@types/lodash": "^4.14.195",
     "@types/morgan": "^1.9.4",
     "@types/oidc-provider": "^8.2.0",

@@ -118,6 +118,7 @@ export class ZeroantContext {
     this.beforeStart()
     const config = this.getConfig()
     this._port = config.serverPort ?? ZeroantContext.PORT
+    this._app.keys = config.appKeys
     this._server = createServer(this._app.callback() as any)
     this._server.listen(this._port, () => {
       this.onStart()
